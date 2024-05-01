@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import "./App.css";
+import { useAppDispatch, useAppSelector } from "./api/store";
+import { storySelect } from "./api/storiesSelect";
+import storiesSlice from "./api/storiesSlice";
+import { getStories } from "./api/api";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const stories = useAppSelector(storySelect);
+
+  useEffect(() => {
+    dispatch(getStories());
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {stories?.story.map((story) => {
+        return (
+          <p key={story.id}>
+            {story.title}
+            {story.by}
+          </p>
+        );
+      })}
     </div>
   );
 }
